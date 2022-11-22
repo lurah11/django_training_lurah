@@ -1,0 +1,107 @@
+{% extends 'templates/base.html' %}
+
+
+{% block content %}
+    <div>
+        <h4 class="middle">Handwritten digit classification using 2 types of ML method </h4>
+    </div>
+    <div>
+        <div class="middle">
+            <p>Draw Your single digit here : </p>
+        </div>
+        <div class="middle" id="signature">
+        
+        </div>
+        <div class="middle">
+            <button id="clear" class="button hollow ">clear</button>
+            <button id = "predict" class="button hollow success">Predict</button>
+        </div>
+        
+    </div>
+
+    <div class="middle">
+        <p style="color:Green;font-weight:700">Lurah Net Prediction:</p>
+        <p>Prediction : <span id="res1"></span></p>
+        <p>Probability : <span id="res2"></span></p>
+        <p style="color:blue;font-weight:700">Modified MobileNetV2 Prediction:</p>
+        <p>Prediction :  <span id="res1_2"></span></p>
+        <p>Probability : <span id="res2_2"></span></p>
+    </div>
+
+    <div style="margin-left: 10px;" class="explanation">
+        <h5>Short Summary:</h5>
+        <p> -I have made 2 CNN model for this project, the first one i called it lurah net, is the cnn build from scratch, while the other one is build from Mobilenetv2 from keras.applications with addition of dense layer to make the digit prediction</p>
+        <p> - As you can see, there are certain digits, which are likely to be predicted incorrectly by either model</p>
+        <p> - MobileNetV2 is certainly powerfull models, as it is usually implemented to more complex image classification problem such as cats vs dogs problem </p>
+        <p> - The poor performance for either model is attributed to my lack of experience in this field and also the lack of computational power --> free colab user here :( </p>
+        <p> - Note : Dataset used to create these models available at kaggle  here : <a href="https://www.kaggle.com/datasets/jcprogjava/handwritten-digits-dataset-not-in-mnist">Not in MNIST dataset</a></p>
+    </div>
+
+
+    <script>
+        const predict = document.getElementById("predict")
+        const clear = document.getElementById("clear")
+        const res1 = document.getElementById("res1")
+        const res2 = document.getElementById("res2")
+        const res1_2 = document.getElementById("res1_2")
+        const res2_2 = document.getElementById("res2_2")
+
+
+
+        $(document).ready(function(){
+
+            const sign = $('#signature').jSignature({
+                'height':64,
+                'width':64,
+                'background-color':'rgb(255, 255, 255)',
+                'style':'border:solid 2px blue'
+            })
+
+            const jsign = document.querySelector("canvas.jSignature")
+            jsign.setAttribute("style"," aspect-ratio: auto 64 / 64;box-sizing: inherit;margin: 0px; padding: 0px;border: solid 2px blue;")
+
+            predict.addEventListener("click",function(e){
+                const data = {
+                    'img_data':$('#signature').jSignature("getData")
+                }
+
+
+                $.ajax({
+                    method:'POST',
+                    data:data,
+                    headers: {
+                        "X-CSRFToken": "{{csrf_token}}"
+                    },
+                    url:"{% url 'digit:predict-digit-view' %}",
+                    success:function(response){
+                        const r1 = response['res1']
+                        const r2 = response['res2']
+                        const r1_2 = response['res1_2']
+                        const r2_2 = response['res2_2']
+                        
+                        res1.innerHTML = r1
+                        res2.innerHTML = r2
+                        res1_2.innerHTML = r1_2
+                        res2_2.innerHTML = r2_2
+                        
+                    }
+                })
+            
+            })
+
+            clear.addEventListener("click",function(e){
+                $('#signature').jSignature("reset")
+            })
+           
+
+
+
+
+        })
+    </script>
+
+
+
+
+
+{% endblock %}

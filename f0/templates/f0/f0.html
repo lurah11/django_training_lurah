@@ -1,0 +1,151 @@
+{% extends 'templates/base.html' %}
+
+{% block content %}
+    <div class="grid-y">
+        <div class="cell">
+            <h3>FO CALCULATOR </h3>
+            <div class="margin-left-2">
+                <p  class="p-small-font margin-bot-1">The F0 value is defined as the thermal lethality time required to eliminate all microorganisms present in foods, by exposing them to a temperature of 121.1ºC and it is expressed in minutes </p>
+            <p class="p-small-font margin-bot-1">For example, we can obtain an F0=3 by exposing a product to 121.1ºC for 3 minutes, or 115ºC for 12 minutes or 124ºC for 2 minutes
+                (<a href="https://www.terrafoodtech.com/en/importance-of-f0-value-in-sterilization/">reference</a>)
+            </p>
+            <p class="p-small-font margin-bot-1 text-color-br">Note : Please leave either F0, Sterilization time, or sterilization temp blank ( only 1 blank max ) </p>
+            </div>
+            <div class="grid-x">
+                <div class="cell small-6">
+                    <form id ="form_f0" >
+                        {% csrf_token %}
+                        <p style="color: blueviolet;">CALCULATION : </p>
+                        <p class="p-small-font margin-bot-1">Standard reference temperature = 121.1 ºC</p>
+                        <p class="p-small-font margin-bot-1">Select the one you want to calculate </p>
+                        <div class="grid-x">
+                            <input class="" type="radio" name="radio_calc" id="rad_f0" value="f0_val" checked>
+                            <label class="cell small-2 p-small-font" for="rad_f0">F0 Calculation</label>
+                            <input class = "" type="radio" name="radio_calc" id="rad_t" value ="t_val">
+                            <label class="cell small-2 p-small-font" for="rad_t">Sterilization time</label>
+                            <input class = "" type="radio" name="radio_calc" id="rad_temp" value ="temp_val">
+                            <label class="cell small-2 p-small-font" for="rad_temp">Sterilization Temp</label>    
+                        </div>
+                        <div class="grid-x">
+                            <label class="cell small-2" for="f0">F0(minutes)</label>
+                            <input class="cell small-2" type="number" id="f0" step="any" disabled name="f0_val">
+                        </div>
+                        <div class="grid-x">
+                            <label class="cell small-2" for="z">z-value (ºC)</label>
+                            <input value=10 class="cell small-2"  step="any" type="number" id="z" name="z_val"> <small style="color:red">default to 10 ºC </small>
+                        </div>
+                        <div class="grid-x">
+                            <label class="cell small-2" for="re">reynolds number</label>
+                            <input value=10000 class="cell small-2"  step="any" type="number" id="re" name="re_val"> <small style="color:red">default to 10000 (turbulence) </small>
+                        </div>
+                        <div class="grid-x">
+                            <label class="cell small-2" for="t">Sterilization time (seconds)</label>
+                            <input class="cell small-2" type="number" step="any" id="t" name="t_val">
+                        </div>
+                        <div class="grid-x">
+                            <label class="cell small-2" for="temp">Sterilization temperature (ºC) </label>
+                            <input class="cell small-2" type="number" step="any" id="temp" name="temp_val">
+                        </div>
+                        <input type="submit" value="calculate the unknown" class="button success">
+                    </form> 
+                
+                </div>
+                <div class = "cell small-6 align-mid">
+                    <h4 class="align-mid">Calculation Result</h4>
+                    <pre class="text-color-br" style="font-weight: bold;" id="result_name"></pre>
+                    <pre class="text-color-cfb" id="result_no_corr"></pre>
+                    <pre class="text-color-cfb"  id ="result_corr"></pre>
+                    <pre style="font-weight: bolder; color: red;" id="result_error"></pre>
+                    <br>
+                    <br>
+                    <pre style="font-weight: bold; color: red; font-size:10;" id="pre_note"></pre>
+                </div>
+                         
+            </div>
+            
+        </div>
+
+    </div>
+    <script>
+        const rad_f0 = document.getElementById('rad_f0')
+        const rad_t = document.getElementById('rad_t')
+        const rad_temp = document.getElementById('rad_temp')
+        const input_f0 = document.getElementById('f0')
+        const input_z = document.getElementById('z')
+        const input_t = document.getElementById('t')
+        const input_temp = document.getElementById('temp')
+
+        console.log(rad_f0)
+
+        rad_f0.addEventListener("change", function(event){
+            input_f0.setAttribute('disabled','') 
+            input_f0.value = ''     
+            input_t.removeAttribute('disabled')
+            input_temp.removeAttribute('disabled')
+        });
+        rad_t.addEventListener("change", function(event){
+            input_t.setAttribute('disabled','')
+            input_t.value = '' 
+            input_f0.removeAttribute('disabled')       
+            input_temp.removeAttribute('disabled')
+        });
+        rad_temp.addEventListener("change", function(event){
+            input_temp.setAttribute('disabled','')
+            input_temp.value = '' 
+            input_f0.removeAttribute('disabled')
+            input_t.removeAttribute('disabled')   
+        });
+
+
+
+
+
+
+
+
+
+
+
+        // AJAX
+        const url = "{% url 'f0:f0-calculation-view' %}";
+        console.log(url);
+        
+        const data = document.getElementById('form_f0');
+
+        const pre_result_no_corr = document.getElementById('result_no_corr')
+        const pre_result_corr = document.getElementById('result_corr')
+        const pre_result_name = document.getElementById('result_name')
+        const pre_error = document.getElementById('result_error')
+        const pre_note = document.getElementById('pre_note')
+     
+        
+       
+        data.addEventListener("submit", async function(event){
+            event.preventDefault();
+            // const form_data = new FormData(data);
+            
+            const response = await fetch(url,{
+                method:'POST',
+                body: new FormData(data)
+            })
+            .then((response)=>response.json())
+            .then((result)=>{
+                console.log('success:',result)
+                pre_result_name.innerHTML = result['name'] + " " + result['unit']
+                pre_result_no_corr.innerHTML = "con corrected = " + result['result']
+                pre_result_corr.innerHTML = "corrected = "+ result['result_corr']
+                pre_note.innerHTML = "Note : 1. if you use flow corrected inputs already,\nthen you should refer to <em>non corrected result<em> instead\n2.If the result is <em>undefined<em> you might use \nphysically impossible condition (e.g : very high sterilization time)"
+                
+
+            })
+            .catch((error)=>{
+                console.log('error',error)
+                pre_error.innerHTML = "ERROR - PLEASE CHECK YOUR INPUT :("
+            })
+        }
+        )
+        
+        
+
+    </script>
+{% endblock %}
