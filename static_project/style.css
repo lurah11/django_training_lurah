@@ -43,3 +43,8 @@ p {
 body {
     margin-left: 50px;
 }
+
+.classif {
+    color: crimson;
+    font-weight: 500;
+}
