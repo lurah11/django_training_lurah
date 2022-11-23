@@ -35,6 +35,10 @@
     align-self: center;
     justify-content: center;
 }
-.explanation p{
-    margin-bottom: 0px;
+p {
+    font-size: small;
+}
+
+body {
+    margin-left: 50px;
 }

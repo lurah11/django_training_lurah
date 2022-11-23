@@ -3,7 +3,7 @@
 
 {% block content %}
     <div>
-        <h4 class="middle">Handwritten digit classification using 2 types of ML method </h4>
+        <h4 class="middle">Handwritten digit classification using 2 types of ML Learning method </h4>
     </div>
     <div>
         <div class="middle">
@@ -72,7 +72,7 @@
                     headers: {
                         "X-CSRFToken": "{{csrf_token}}"
                     },
-                    url:"{% url 'digit:predict-digit-view' %}",
+                    url:"{% url 'dsml:digit:predict-digit-view' %}",
                     success:function(response){
                         const r1 = response['res1']
                         const r2 = response['res2']

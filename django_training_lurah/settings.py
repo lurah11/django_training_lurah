@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'food_safety',
     'f0',
     'digit',
+    'dsml',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

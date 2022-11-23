@@ -5,6 +5,6 @@ from . import views
 app_name = 'digit'
 
 urlpatterns = [
-    path('digit/', views.digit_home_view, name='digit-home-view'),
-    path('digit/calc',views.predict_digit_view,name='predict-digit-view')
+    path('', views.digit_home_view, name='digit-home-view'),
+    path('calc',views.predict_digit_view,name='predict-digit-view')
 ]

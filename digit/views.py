@@ -6,7 +6,10 @@ from PIL import Image, ImageOps
 import io
 from tensorflow import keras
 import urllib
+from django.conf import settings
+import os 
 
+base_dir = settings.BASE_DIR
 
 
 #helper Function 
@@ -19,8 +22,8 @@ def is_grey_scale(img):
                 return False
     return True
 
-model_1 = keras.models.load_model('digit\lurah_cnn_handwriting_classifier_rgb_1.h5')
-model_2 = keras.models.load_model('digit\lurah_cnn_handwriting_mobilenet_2.h5')
+model_1 = keras.models.load_model(os.path.join(base_dir,'digit','lurah_cnn_handwriting_classifier_rgb_1.h5'))
+model_2 = keras.models.load_model(os.path.join(base_dir,'digit','lurah_cnn_handwriting_mobilenet_2.h5'))
 
 print(model_1.summary())
 print(model_2.summary())

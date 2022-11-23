@@ -21,5 +21,5 @@ urlpatterns = [
     path('',include('home.urls')),
     path('food_safety',include('food_safety.urls')),
     path('food_safety/f0_calc',include('f0.urls')),
-    path('dsml/',include('digit.urls'))
+    path('dsml/',include('dsml.urls')),
 ]

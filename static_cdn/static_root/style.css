@@ -35,3 +35,10 @@
     align-self: center;
     justify-content: center;
 }
+p {
+    font-size: small;
+}
+
+body {
+    margin-left: 50px;
+}
