@@ -1,0 +1,44 @@
+{% extends 'templates/base.html' %}
+
+{% block content %}
+    <div class="middle">
+        <h3>FOOD SAFETY UPDATER</h3>
+        <button id="update" class="button">update</button>
+
+    </div>
+
+
+    <script>
+        const update = document.getElementById('update')
+        // const data = {
+        //     "news":"bpom",
+        //     "csrfmiddlewaretoken":"{{csrf_token}}"
+        // }
+        form_data = new FormData()
+
+        form_data.append("news","bpom")
+        form_data.append("csrfmiddlewaretoken","{{csrf_token}}")
+
+        const url = "{% url 'fsupdater:reg-update-view' %}"
+
+        const update_news = async ()=>{
+                const resp = await fetch(url,{
+                    method : "POST",
+                    body : form_data
+
+                }
+                    
+                );
+               return resp.json()
+            }
+
+        update.addEventListener("click",function(e){
+            const resp = update_news().then(data=>{
+                console.log(data)
+            }
+
+            )
+        })
+
+    </script>
+{% endblock %}

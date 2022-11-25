@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'f0',
     'digit',
     'dsml',
+    'fsupdater',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

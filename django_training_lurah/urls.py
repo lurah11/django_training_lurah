@@ -22,4 +22,5 @@ urlpatterns = [
     path('food_safety',include('food_safety.urls')),
     path('food_safety/f0_calc',include('f0.urls')),
     path('dsml/',include('dsml.urls')),
+    path('food_safety/fsupdater/',include('fsupdater.urls'))
 ]
