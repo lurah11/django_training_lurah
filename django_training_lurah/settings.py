@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['lurah11.pythonanywhere.com','localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
     'home',
     'food_safety',
     'f0',

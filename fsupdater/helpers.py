@@ -1,4 +1,4 @@
-from .models import Entity,News
+from fsupdater.models import Entity,News
 import re 
 import requests
 from datetime import date,timedelta,datetime

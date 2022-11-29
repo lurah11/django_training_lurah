@@ -1,0 +1,4 @@
+#!usr/bin/bash
+cd /home/lurah11/django_training_lurah/
+source env_django_training/bin/activate
+python manage.py runscript schedule_task_for_pythonanywhere
