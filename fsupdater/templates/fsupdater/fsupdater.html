@@ -3,42 +3,65 @@
 {% block content %}
     <div class="middle">
         <h3>FOOD SAFETY UPDATER</h3>
-        <button id="update" class="button">update</button>
+        <a class="button" href="{% url 'fsupdater:reg-check-view' %}">CHECK FOR UPDATE WITHIN A WEEK</a>
 
     </div>
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <td>No</td>
+                    <td>Entity</td>
+                    <td>Date</td>
+                    <td>News</td>
+                    <td>URL</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for news in list_news %}  
+                        <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{news.name.name}}</td>
+                        <td>{{news.date}}</td>
+                        <td>{{news.news}}</td>
+                        <td> <a href="{{news.name.url}}">{{news.name.url}}</a></td>
+                        </tr>                           
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="explanation">
+        <p style="color:red">EXPLANATION ABOUT THE APP</p>
+        <ul>
+            <li>
+                This app is used to do automatic update from targeted websites every day 
+            </li>
+            <li>
+                The targeted websites are some of websites which provide information about food and or drug safety. List and short explanation of entities can be found <a style="text-decoration-line: underline; font-weight: 600;" href="{% url 'fsupdater:entity-detail-view' %}">here</a>
+            </li>
+            <li>
+                The information required to do scraping from the websites are stored in database, e.g : url, selector for date, and selector for news title 
+            </li>
+            <li>
+                Automatic update is done everyday at specific time using python library called "schedule"
+            </li>
+            <li>
+                Any request made using "check for update within a week" button, will be fetched from database instead of targeted websites ( to avoid being blocked by websites )
+            </li>
+            <li>
+                Any websites which do not have updated information within a week will be marked as "No update this week"
+            </li>
+        </ul>
+    </div>
+    
+
 
 
     <script>
-        const update = document.getElementById('update')
-        // const data = {
-        //     "news":"bpom",
-        //     "csrfmiddlewaretoken":"{{csrf_token}}"
-        // }
-        form_data = new FormData()
-
-        form_data.append("news","bpom")
-        form_data.append("csrfmiddlewaretoken","{{csrf_token}}")
-
-        const url = "{% url 'fsupdater:reg-update-view' %}"
-
-        const update_news = async ()=>{
-                const resp = await fetch(url,{
-                    method : "POST",
-                    body : form_data
-
-                }
-                    
-                );
-               return resp.json()
-            }
-
-        update.addEventListener("click",function(e){
-            const resp = update_news().then(data=>{
-                console.log(data)
-            }
-
-            )
-        })
+       
 
     </script>
 {% endblock %}

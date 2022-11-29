@@ -37,8 +37,18 @@
 }
 p {
     font-size: small;
+    margin-bottom: 0;
 }
 
 body {
     margin-left: 50px;
+}
+
+.classif {
+    color: crimson;
+    font-weight: 500;
+}
+
+.table-scroll p {
+    font-size:xx-small;
 }
