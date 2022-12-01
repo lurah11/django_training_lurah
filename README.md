@@ -5,3 +5,5 @@ This project is made so i can implement my knowledge about django in food safety
   <li>2. Food safety Updater ( food safety )<li>
   <li>3. Hand written digit classification ( Jsignature +  Neural Network )<li>
 <ul>
+  
+this web app is deployed at https://lurah11.pythonanywhere.com/
