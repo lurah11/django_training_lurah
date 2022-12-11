@@ -30,7 +30,7 @@ last_week = today - timedelta(days=7)
 
 def check_zero_pad_date(fs,str_date):
     if fs == "usfda":
-        split = re.split(' |, ',str_date)
+        split = re.split(' ',str_date)
 
         if len(split[1]) == 1 :
             split[1] = "0" + split[1]
